@@ -217,7 +217,6 @@ def imshow(img):
 
 net = botnet().cuda()
 param = list(net.parameters())
-
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -244,7 +243,7 @@ for epoch in range(3):  # loop over the dataset multiple times
     running_loss = 0.0
 
     if(epoch>0):
-        net = Net()
+        net = botnet()
         net.load_state_dict(torch.load(save_path))
         net.to(device)
 
@@ -254,7 +253,7 @@ for epoch in range(3):  # loop over the dataset multiple times
         inputs, labels = inputs.to(device), labels.to(device)
         # zero the parameter gradients
         optimizer.zero_grad()
-        outputs,f = net(inputs)
+        outputs = net(inputs)
         loss = criterion(outputs, labels)
 
         loss.backward()
@@ -283,7 +282,7 @@ with torch.no_grad():
         images, labels = data
         images = images.cuda()
         labels = labels.cuda()
-        outputs,_ = net(images)
+        outputs = net(images)
         _, predicted = torch.max(outputs, 1)
         c = (predicted == labels).squeeze()
         for i in range(16):
